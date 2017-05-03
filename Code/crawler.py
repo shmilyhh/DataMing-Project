@@ -74,30 +74,36 @@ class Crawler():
 
     def crawler_paper(self):
         self.results = []
-        
+        self.no_keywords_urls = []
         i = 1
         
         for url in self.urls:
             final_url, content = self.get_page(url)
         
             if not os.path.exists(os.path.join(self.output_root, 'content_ML')):
-                os.makedirs(os.path.join(self.output_root, 'content'))
+                os.makedirs(os.path.join(self.output_root, 'content_ML'))
 
             with codecs.open(os.path.join(self.output_root, 'content_ML','science_direct_'+str(i)), 'wb', 'utf-8') as out:
                 out.write(content)
 
             print "Crawling ScienceDirect Data: ", url
 
-            if not os.path.exists(os.path.join(self.output_root, 'results')):
-                os.makedirs(os.path.join(self.output_root, 'results'))
+            if not os.path.exists(os.path.join(self.output_root, 'results_ML')):
+                os.makedirs(os.path.join(self.output_root, 'results_ML'))
             
             result = self.parse_result(content)
+            if result["Keywords"] == []:
+                self.no_keywords_urls.append(url)
+
             self.results.append(result)
 
-            with codecs.open(os.path.join(self.output_root, 'results', 'paper_' + str(i) + '.json'), 'wb', 'utf-8') as f:
+            with codecs.open(os.path.join(self.output_root, 'results_ML', 'paper_' + str(i) + '.json'), 'wb', 'utf-8') as f:
                     json.dump(self.results, f, indent=4)
             i += 1
-            time.sleep(5)
+            # time.sleep(5)
+
+        with codecs.open(os.path.join(self.output_root, 'no_keywords_urls.json'), 'wb', 'utf-8') as f:
+            json.dump(self.no_keywords_urls, f, indent=4)
 
                 
     def start_crawl(self):
