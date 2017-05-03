@@ -1,0 +1,97 @@
+import requests
+import json
+from bs4 import BeautifulSoup
+import sys, os
+from collections import OrderedDict
+from datetime import date, timedelta, datetime
+import codecs
+
+class crawler():
+    def __init__(self, urls):
+        self.urls = urls
+        self.results = []
+        self.output_root = ""
+        
+        if not os.path.exists(self.output_root):
+            os.makedirs(self.output_root)
+
+    def get_page(self, url):
+        try:
+            headers  = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:47.0) Gecko/20100101 Firefox/47.0'}
+            response = requests.get(url, headers = headers)
+            if response.status_code == 403:
+                print '403' + url
+                sys.exit()
+        
+            return response.url, response.text
+        except:
+            print 'Error: ' + url
+            return 'ERROR', 'ERROR'
+
+    def parse_result(self, content):
+        page = BeautifulSoup(content)
+        d = {}
+
+        # Keywords
+        keywords = []
+        if page.find("ul", "keyword").find_all("li"):
+            for kw in page.find("ul", "keyword").find_all("li"):
+                keywords.append(kw.get_text())
+        # Title
+        if page.find("h1", "svTitle"):
+            title = page.find("h1", "svTitle").get_text()
+        else:
+            title = 'None'
+        # Abstract
+        if page.find(id="spara0002"):
+            abstract = page.find(id="spara0002").get_text()
+        else:
+            abstract = 'None'
+        # Authors
+        authors = []
+        if page.find("ul", "authorGroup noCollab svAuthor").find_all("a", "authorName svAuthor"):
+            for author in page.find("ul", "authorGroup noCollab svAuthor").find_all("a", "authorName svAuthor"):
+                authors.append(author.get_text())
+
+        d["keywords"] = keywords
+        d["title"] = title
+        d["abstract"] = abstract
+        d["authors"] = authors
+                
+        return d
+
+    def crawler_Paper(self):
+        self.results = []
+        
+        i = 1
+        
+        for url in self.urls:
+            final_url, content = self.get_page(url)
+        
+            if not os.path.exists(os.path.join(self.output_root, 'content')):
+                os.makedirs(os.path.join(self.output_root, 'content'))
+
+            with codecs.open(os.path.join(self.output_root, 'content','linkedin_test_'+str(i)), 'wb', 'utf-8') as out:
+                out.write(content)
+            
+            i += 1
+
+            print "Crawling ScienceDirect Data..."
+
+            if not os.path.exists(os.path.join(self.output_root, 'results')):
+                os.makedirs(os.path.join(self.output_root, 'results'))
+            
+            result = self.parse_result(content)
+            self.results.append(result)
+
+        with codecs.open(os.path.join(self.output_root, 'results', 'paper.json'), 'wb', 'utf-8') as f:
+                json.dump(self.results, f, indent=4)
+                
+    def start_crawl(self):
+        self.crawler_Paper()
+
+if __name__ == '__main__':
+    crawler(urls).start_crawl() 
+    
+
+
