@@ -85,8 +85,6 @@ class Crawler():
 
             with codecs.open(os.path.join(self.output_root, 'content','science_direct_'+str(i)), 'wb', 'utf-8') as out:
                 out.write(content)
-            
-            i += 1
 
             print "Crawling ScienceDirect Data: ", url
 
@@ -95,10 +93,12 @@ class Crawler():
             
             result = self.parse_result(content)
             self.results.append(result)
-            time.sleep(10)
 
-        with codecs.open(os.path.join(self.output_root, 'results', 'paper.json'), 'wb', 'utf-8') as f:
-                json.dump(self.results, f, indent=4)
+            with codecs.open(os.path.join(self.output_root, 'results', 'paper_' + str(i) + '.json'), 'wb', 'utf-8') as f:
+                    json.dump(self.results, f, indent=4)
+            i += 1
+            time.sleep(5)
+
                 
     def start_crawl(self):
         self.crawler_paper()
