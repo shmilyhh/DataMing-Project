@@ -77,7 +77,7 @@ class Crawler():
             
             i += 1
 
-            print "Crawling ScienceDirect Data..."
+            print "Crawling ScienceDirect Data: ", url
 
             if not os.path.exists(os.path.join(self.output_root, 'results')):
                 os.makedirs(os.path.join(self.output_root, 'results'))
