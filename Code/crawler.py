@@ -1,16 +1,17 @@
 import requests
 import json
 from bs4 import BeautifulSoup
+import json
 import sys, os
 from collections import OrderedDict
 from datetime import date, timedelta, datetime
 import codecs
 
-class crawler():
+class Crawler():
     def __init__(self, urls):
         self.urls = urls
         self.results = []
-        self.output_root = ""
+        self.output_root = "../Data"
         
         if not os.path.exists(self.output_root):
             os.makedirs(self.output_root)
@@ -60,7 +61,7 @@ class crawler():
                 
         return d
 
-    def crawler_Paper(self):
+    def crawler_paper(self):
         self.results = []
         
         i = 1
@@ -71,7 +72,7 @@ class crawler():
             if not os.path.exists(os.path.join(self.output_root, 'content')):
                 os.makedirs(os.path.join(self.output_root, 'content'))
 
-            with codecs.open(os.path.join(self.output_root, 'content','linkedin_test_'+str(i)), 'wb', 'utf-8') as out:
+            with codecs.open(os.path.join(self.output_root, 'content','science_direct_'+str(i)), 'wb', 'utf-8') as out:
                 out.write(content)
             
             i += 1
@@ -88,10 +89,19 @@ class crawler():
                 json.dump(self.results, f, indent=4)
                 
     def start_crawl(self):
-        self.crawler_Paper()
+        self.crawler_paper()
 
 if __name__ == '__main__':
-    crawler(urls).start_crawl() 
+    data_path = "../Data"
+    with open(os.path.join(data_path, urls_IR.json)) as fp:
+        ir = json.load(fp)
+    with open(os.path.join(data_path, urls_ML.json)) as fp:
+        ml = json.load(fp)
+
+    print("IR Crawlering...")
+    Crawler(ir).start_crawl() 
+    print("ML Crawlering...")
+    Crawler(ml).start_crawl() 
     
 
 
