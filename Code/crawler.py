@@ -59,15 +59,15 @@ class Crawler():
         else:
             abstract = 'None'
         # Authors
-        authors = []
-        if page.find("ul", "authorGroup noCollab svAuthor").find_all("a", "authorName svAuthor"):
-            for author in page.find("ul", "authorGroup noCollab svAuthor").find_all("a", "authorName svAuthor"):
-                authors.append(author.get_text())
+        # authors = []
+        # if page.find("ul", "authorGroup noCollab svAuthor").find_all("a", "authorName svAuthor"):
+        #     for author in page.find("ul", "authorGroup noCollab svAuthor").find_all("a", "authorName svAuthor"):
+        #         authors.append(author.get_text())
 
         d["keywords"] = keywords
         d["title"] = title
         d["abstract"] = abstract
-        d["authors"] = authors
+        # d["authors"] = authors
                 
         return d
 
