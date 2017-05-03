@@ -35,9 +35,19 @@ class Crawler():
 
         # Keywords
         keywords = []
-        if page.find("ul", "keyword").find_all("li"):
-            for kw in page.find("ul", "keyword").find_all("li"):
-                keywords.append(kw.get_text())
+        # normal
+        if page.find(attrs={"class":"keyword"}):
+            if page.find(attrs={"class":"keyword"}).find_all(attrs={"class":"svKeywords"}):
+                for kw in page.find(attrs={"class":"keyword"}).find_all(attrs={"class":"svKeywords"}):
+                    keywords.append(kw.get_text())
+        elif page.find(attrs={"class":"Keywords"}):
+            if page.find(attrs={"class":"Keywords"}).find_all(attrs={"class":"keyword"}):
+                for kw in page.find(attrs={"class":"Keywords"}).find_all(attrs={"class":"keyword"}):
+                    keywords.append(kw.get_text())
+        else:
+            print "=================="
+            print "not found keywords"
+            print "=================="
         # Title
         if page.find("h1", "svTitle"):
             title = page.find("h1", "svTitle").get_text()
