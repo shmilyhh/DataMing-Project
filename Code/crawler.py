@@ -1,3 +1,4 @@
+import time
 import requests
 import json
 from bs4 import BeautifulSoup
@@ -94,6 +95,7 @@ class Crawler():
             
             result = self.parse_result(content)
             self.results.append(result)
+            time.sleep(10)
 
         with codecs.open(os.path.join(self.output_root, 'results', 'paper.json'), 'wb', 'utf-8') as f:
                 json.dump(self.results, f, indent=4)
