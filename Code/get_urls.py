@@ -9,7 +9,7 @@ if __name__ == '__main__':
     driver.get(base_url)
     urls = []
     flag = True
-    page = 1
+    page_id = 1
     while flag:
         content = driver.page_source
         page = BeautifulSoup(content)
@@ -17,14 +17,14 @@ if __name__ == '__main__':
             items = page.find_all('li', 'detail')
             for item in items:
                 urls.append(item.a['href'])  
-        with open("urls_" + str(page) + ".json", "w") as fp:
+        with open("urls_" + str(page_id) + ".json", "w") as fp:
             json.dump(urls, fp, indent=4)          
-        print (page, "Finished")
+        print (page_id, "Finished")
         try:
             time.sleep(5)
             driver.find_element_by_name("bottomNext").click()
             time.sleep(5)
-            page += 1
+            page_id += 1
         except:
             print ("At the end")
             flag = False
