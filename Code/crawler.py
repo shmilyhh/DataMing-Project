@@ -92,7 +92,7 @@ class Crawler():
                 os.makedirs(os.path.join(self.output_root, 'results_ML'))
             
             result = self.parse_result(content)
-            if result["Keywords"] == []:
+            if result["keywords"] == []:
                 self.no_keywords_urls.append(url)
 
             self.results.append(result)
