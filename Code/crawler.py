@@ -80,10 +80,10 @@ class Crawler():
         for url in self.urls:
             final_url, content = self.get_page(url)
         
-            if not os.path.exists(os.path.join(self.output_root, 'content')):
+            if not os.path.exists(os.path.join(self.output_root, 'content_ML')):
                 os.makedirs(os.path.join(self.output_root, 'content'))
 
-            with codecs.open(os.path.join(self.output_root, 'content','science_direct_'+str(i)), 'wb', 'utf-8') as out:
+            with codecs.open(os.path.join(self.output_root, 'content_ML','science_direct_'+str(i)), 'wb', 'utf-8') as out:
                 out.write(content)
 
             print "Crawling ScienceDirect Data: ", url
@@ -110,8 +110,8 @@ if __name__ == '__main__':
     with open(os.path.join(data_path, "urls_ML.json")) as fp:
         ml = json.load(fp)
 
-    print("IR Crawlering...")
-    Crawler(ir).start_crawl() 
+    # print("IR Crawlering...")
+    # Crawler(ir).start_crawl() 
     print("ML Crawlering...")
     Crawler(ml).start_crawl() 
     
