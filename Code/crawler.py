@@ -80,16 +80,16 @@ class Crawler():
         for url in self.urls:
             final_url, content = self.get_page(url)
         
-            if not os.path.exists(os.path.join(self.output_root, 'content_ML')):
-                os.makedirs(os.path.join(self.output_root, 'content_ML'))
+            if not os.path.exists(os.path.join(self.output_root, 'content_IR')):
+                os.makedirs(os.path.join(self.output_root, 'content_IR'))
 
-            with codecs.open(os.path.join(self.output_root, 'content_ML','science_direct_'+str(i)), 'wb', 'utf-8') as out:
+            with codecs.open(os.path.join(self.output_root, 'content_IR','science_direct_'+str(i)), 'wb', 'utf-8') as out:
                 out.write(content)
 
             print "Crawling ScienceDirect Data: ", url
 
-            if not os.path.exists(os.path.join(self.output_root, 'results_ML')):
-                os.makedirs(os.path.join(self.output_root, 'results_ML'))
+            if not os.path.exists(os.path.join(self.output_root, 'results_IR')):
+                os.makedirs(os.path.join(self.output_root, 'results_IR'))
             
             result = self.parse_result(content)
             if result["keywords"] == []:
@@ -97,12 +97,12 @@ class Crawler():
 
             self.results.append(result)
 
-            with codecs.open(os.path.join(self.output_root, 'results_ML', 'paper_' + str(i) + '.json'), 'wb', 'utf-8') as f:
+            with codecs.open(os.path.join(self.output_root, 'results_IR', 'paper_' + str(i) + '.json'), 'wb', 'utf-8') as f:
                     json.dump(self.results, f, indent=4)
             i += 1
             # time.sleep(5)
 
-        with codecs.open(os.path.join(self.output_root, 'no_keywords_urls.json'), 'wb', 'utf-8') as f:
+        with codecs.open(os.path.join(self.output_root, 'no_keywords_urls_ir.json'), 'wb', 'utf-8') as f:
             json.dump(self.no_keywords_urls, f, indent=4)
 
                 
@@ -116,10 +116,10 @@ if __name__ == '__main__':
     with open(os.path.join(data_path, "urls_ML.json")) as fp:
         ml = json.load(fp)
 
-    # print("IR Crawlering...")
-    # Crawler(ir).start_crawl() 
-    print("ML Crawlering...")
-    Crawler(ml).start_crawl() 
+    print("IR Crawlering...")
+    Crawler(ir).start_crawl() 
+    # print("ML Crawlering...")
+    # Crawler(ml).start_crawl() 
     
 
 
