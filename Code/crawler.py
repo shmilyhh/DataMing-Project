@@ -93,9 +93,9 @@ class Crawler():
 
 if __name__ == '__main__':
     data_path = "../Data"
-    with open(os.path.join(data_path, urls_IR.json)) as fp:
+    with open(os.path.join(data_path, "urls_IR.json")) as fp:
         ir = json.load(fp)
-    with open(os.path.join(data_path, urls_ML.json)) as fp:
+    with open(os.path.join(data_path, "urls_ML.json")) as fp:
         ml = json.load(fp)
 
     print("IR Crawlering...")
